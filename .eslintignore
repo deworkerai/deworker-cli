@@ -1,0 +1,5 @@
+.husky
+dist
+scripts
+package.json
+tsconfig.json
