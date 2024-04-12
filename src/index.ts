@@ -1,8 +1,13 @@
-import { hello } from './command/hello';
+#!/usr/bin/env tsx
 
-export default function sayHello() {
-  const output = hello();
-  console.log(output);
-}
+import { Command } from 'commander';
 
-sayHello();
+import subworkerCMD from './command/subworker';
+import peerCMD from './command/peer';
+
+const program = new Command('deworker');
+
+program.addCommand(subworkerCMD, { hidden: false });
+program.addCommand(peerCMD, { hidden: false });
+
+program.parse(process.argv);

@@ -1,0 +1,34 @@
+type: subworker
+version: 1.0.0
+
+schema:
+  id: subworker-01
+  name:
+    human: name for human
+    model: name for human
+  description:
+    human: description for human
+    model: description for model
+  avatar: url for avatar
+  creator: Questflow
+  skills:
+    - name:
+        human: name for human
+        model: name for model
+      description:
+        human: description for human
+        model: description for model
+      handler: functionName
+      requestSchema:
+        type: object
+        properties:
+          param1:
+            type: string
+            description: description
+      responseSchema:
+        type: object
+        properties:
+          param1:
+            type: string
+            description: description
+  entry: ./dist/index.js
