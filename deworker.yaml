@@ -32,3 +32,6 @@ schema:
             type: string
             description: description
   entry: ./dist/index.js
+  hooks:
+    post: functionName
+    pre: functionName

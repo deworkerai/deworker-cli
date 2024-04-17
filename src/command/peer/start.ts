@@ -89,6 +89,13 @@ export default async function handleStartSubworker(options: any) {
 
   console.log(chalk.green(`connected to the relay ${chalk.cyan(addr.data)}`));
 
+  const entry = await import(path.join(process.cwd(), schema.schema.entry));
+
+  if (schema.schema.hooks?.post) {
+    console.log(chalk.green(`executing post hooks...`));
+    await entry[schema.schema.hooks.post]();
+  }
+
   await node.handle(
     '/call/1.0.0',
     async ({ stream }) => {
@@ -104,10 +111,9 @@ export default async function handleStartSubworker(options: any) {
           };
           console.log(chalk.green(`calling the skill ${chalk.cyan(message.skill)} ...`));
 
-          const entry = await import(path.join(process.cwd(), schema.schema.entry));
           // run handler
           const skill = schema.schema.skills.find((sk: any) => sk.name.model === message.skill);
-          const res = entry[skill.handler]({ params: message.params });
+          const res = await entry[skill.handler]({ params: message.params });
 
           // Encode the reply message
           const replyMessage = encode(res);
