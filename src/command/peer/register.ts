@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 
-import { DeworkerAPI } from '../../lib/deworker-api';
+import { DeworkerAPI } from '../../lib/deworker-api/index.js';
 
-export default async function handleRegisterPeer(options: any, command: any) {
+export default async function handleRegisterPeer(options: any) {
   const { key, peerId, subworkerId } = options;
   if (!key) {
     console.log(chalk.red('API key is required'));
@@ -24,6 +24,7 @@ export default async function handleRegisterPeer(options: any, command: any) {
 
   const deworkerAPI = new DeworkerAPI({
     apiKey: options.key,
+    endpoint: options.endpoint,
   });
 
   console.log(chalk.green('registering peer...'));

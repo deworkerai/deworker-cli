@@ -1,7 +1,7 @@
 import { Command } from 'commander';
-import handleGenerate from './generate';
-import handleStartPeer from './start';
-import handleRegisterPeer from './register';
+import handleGenerate from './generate.js';
+import handleStartPeer from './start.js';
+import handleRegisterPeer from './register.js';
 
 const cmd = new Command('peer');
 
@@ -18,12 +18,14 @@ cmd
   .option('--key <key>', 'deworker api key')
   .option('--peerId <peerId>', 'peer ID, can obtain with "deworker peer generate command"')
   .option('--subworkerId <subworkerId>', 'subworker ID')
+  .option('--endpoint <endpoint>', 'deworker api endpoint')
   .action(handleRegisterPeer);
 
 cmd
   .command('start')
   .description('start run a subworker as a miner')
   .option('--key <key>', 'deworker api key')
+  .option('--endpoint <endpoint>', 'deworker api endpoint')
   .action(handleStartPeer);
 
 export default cmd;

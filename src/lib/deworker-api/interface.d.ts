@@ -3,7 +3,7 @@ export interface DeworkerOptions {
   apiKey?: string;
 }
 
-export type IResponse<D extends any> =
+export type IResponse<D> =
   | {
       status: 'success';
       data: D;
@@ -24,7 +24,7 @@ export interface IPeerRegisterParams {
 export interface ISubworkerRegisterParams
   extends Pick<
     ISubworker,
-    | 'id'
+    | 'subworkerId'
     | 'nameForHuman'
     | 'nameForModel'
     | 'descriptionForHuman'
@@ -34,7 +34,7 @@ export interface ISubworkerRegisterParams
   > {}
 
 export interface ISubworker {
-  id: string;
+  subworkerId: string;
   nameForHuman: string;
   nameForModel: string;
   descriptionForHuman: string;

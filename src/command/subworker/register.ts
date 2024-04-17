@@ -3,9 +3,9 @@ import path from 'path';
 import fs from 'fs';
 import YAML from 'yaml';
 
-import { DeworkerAPI } from '../../lib/deworker-api';
+import { DeworkerAPI } from '../../lib/deworker-api/index.js';
 
-export default async function handleRegisterSubworker(options: any, command: any) {
+export default async function handleRegisterSubworker(options: any) {
   if (!options.key) {
     console.log(chalk.red('API key is required'));
     process.exit(1);
@@ -13,6 +13,7 @@ export default async function handleRegisterSubworker(options: any, command: any
 
   const deworkerAPI = new DeworkerAPI({
     apiKey: options.key,
+    endpoint: options.endpoint,
   });
 
   const yamlPath = path.join(process.cwd(), 'deworker.yaml');
@@ -29,9 +30,9 @@ export default async function handleRegisterSubworker(options: any, command: any
   }
 
   console.log(chalk.green('registering subworker...'));
-  const { id, name, description, avatar, skills } = schema.schema;
+  const { id: subworkerId, name, description, avatar, skills } = schema.schema;
   const res = await deworkerAPI.registerSubworker({
-    id,
+    subworkerId,
     nameForHuman: name.human,
     nameForModel: name.model,
     descriptionForHuman: description.human,

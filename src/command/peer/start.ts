@@ -13,15 +13,19 @@ import { createFromJSON } from '@libp2p/peer-id-factory';
 import { pipe } from 'it-pipe';
 import { decode, encode } from '@msgpack/msgpack';
 
-import { DeworkerAPI } from '../../lib/deworker-api';
+import { DeworkerAPI } from '../../lib/deworker-api/index.js';
 
-export default async function handleStartSubworker(options: any, command: any) {
+export default async function handleStartSubworker(options: any) {
   if (!options.key) {
     console.log(chalk.red('API key is required'));
     process.exit(1);
   }
 
   const yamlPath = path.join(process.cwd(), 'deworker.yaml');
+  if (!fs.existsSync(yamlPath)) {
+    console.log(chalk.red('deworker.yaml not found.'));
+    process.exit(1);
+  }
   const file = fs.readFileSync(yamlPath, 'utf8');
   const schema = YAML.parse(file);
 
@@ -38,6 +42,7 @@ export default async function handleStartSubworker(options: any, command: any) {
   console.log(chalk.green('choosing a best one relay node address...'));
   const deworkerAPI = new DeworkerAPI({
     apiKey: options.key,
+    endpoint: options.endpoint,
   });
 
   const addr = await deworkerAPI.getBestRelay();
@@ -80,26 +85,29 @@ export default async function handleStartSubworker(options: any, command: any) {
   await node.start();
   console.log(chalk.green(`peer started with id ${chalk.cyan(node.peerId.toString())}`));
 
-  const conn = await node.dial(multiaddr(addr.data));
+  await node.dial(multiaddr(addr.data));
 
   console.log(chalk.green(`connected to the relay ${chalk.cyan(addr.data)}`));
 
   await node.handle(
     '/call/1.0.0',
-    async ({ stream, connection }) => {
+    async ({ stream }) => {
       return pipe(stream.source, async function (source) {
         // For each chunk of data
         for await (const msg of source) {
           // Output the data as a utf8 string
           const message = decode(msg.subarray()) as {
             skill: string;
+            subworkerName: string;
+            subworkerId?: string;
             params: any;
           };
+          console.log(chalk.green(`calling the skill ${chalk.cyan(message.skill)} ...`));
 
           const entry = await import(path.join(process.cwd(), schema.schema.entry));
           // run handler
           const skill = schema.schema.skills.find((sk: any) => sk.name.model === message.skill);
-          const res = entry[skill.handler]();
+          const res = entry[skill.handler]({ params: message.params });
 
           // Encode the reply message
           const replyMessage = encode(res);
@@ -125,8 +133,13 @@ export default async function handleStartSubworker(options: any, command: any) {
   });
 
   // Wait for connection and relay to be bind for the example purpose
-  node.addEventListener('self:peer:update', (evt) => {
+  node.addEventListener('self:peer:update', () => {
     // Updated self multiaddrs?
     console.log(chalk.green(`advertising with a relay address of ${chalk.cyan(node.getMultiaddrs()[0]?.toString())}`));
   });
+
+  // node.addEventListener('connection:close', (evt) => {
+  //   console.log(evt);
+  //   // console.log(chalk.cyan(remotePeer.toString()) + chalk.green(' connected'));
+  // });
 }
