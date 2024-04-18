@@ -17,13 +17,13 @@ cmd
   .description('register a peer')
   .option('--key <key>', 'deworker api key')
   .option('--peerId <peerId>', 'peer ID, can obtain with "deworker peer generate command"')
-  .option('--subworkerId <subworkerId>', 'subworker ID')
+  .option('--workerId <workerId>', 'worker ID')
   .option('--endpoint <endpoint>', 'deworker api endpoint')
   .action(handleRegisterPeer);
 
 cmd
   .command('start')
-  .description('start run a subworker as a miner')
+  .description('start run a worker as a miner')
   .option('--key <key>', 'deworker api key')
   .option('--endpoint <endpoint>', 'deworker api endpoint')
   .action(handleStartPeer);

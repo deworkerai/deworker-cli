@@ -2,15 +2,16 @@
 // install local package: pnpm install -g "deworker-cli@link:$(pwd)"
 import { Command } from 'commander';
 
-import subworkerCMD from './command/subworker/index.js';
+import workerCMD from './command/worker/index.js';
 import peerCMD from './command/peer/index.js';
-
-console.log('Welcome to use deworker cli');
-console.log();
+import configCMD from './command/config/index.js';
 
 const program = new Command('deworker');
 
-program.addCommand(subworkerCMD, { hidden: false });
+program.addCommand(workerCMD, { hidden: false });
 program.addCommand(peerCMD, { hidden: false });
+program.addCommand(configCMD, { hidden: false });
+
+program.usage('<command> [options]');
 
 program.parse(process.argv);

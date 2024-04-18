@@ -4,7 +4,7 @@ import path from 'path';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
 
-export default async function handleRegisterSubworker(options: any) {
+export default async function handleRegisterWorker(options: any) {
   if (!options.key) {
     console.log(chalk.red('API key is required'));
     process.exit(1);

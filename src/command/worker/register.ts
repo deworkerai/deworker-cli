@@ -2,18 +2,16 @@ import chalk from 'chalk';
 import path from 'path';
 import fs from 'fs';
 import YAML from 'yaml';
+import config from '../../lib/config/index.js';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
+import { checkAPIKey } from '../../helpers/config.js';
 
-export default async function handleRegisterSubworker(options: any) {
-  if (!options.key) {
-    console.log(chalk.red('API key is required'));
-    process.exit(1);
-  }
-
+export default async function handleRegisterWorker(options: any) {
+  checkAPIKey(options.key);
   const deworkerAPI = new DeworkerAPI({
-    apiKey: options.key,
-    endpoint: options.endpoint,
+    apiKey: options.key || config.get('key'),
+    endpoint: options.endpoint || config.get('endpoint'),
   });
 
   const yamlPath = path.join(process.cwd(), 'deworker.yaml');
@@ -24,15 +22,15 @@ export default async function handleRegisterSubworker(options: any) {
 
   const file = fs.readFileSync(yamlPath, 'utf8');
   const schema = YAML.parse(file);
-  if (schema.type !== 'subworker') {
-    console.log(chalk.red('type must be subworker, found ', schema.type));
+  if (schema.type !== 'worker') {
+    console.log(chalk.red('type must be worker, found ', schema.type));
     process.exit(1);
   }
 
-  console.log(chalk.green('registering subworker...'));
-  const { id: subworkerId, name, description, avatar, skills } = schema.schema;
-  const res = await deworkerAPI.registerSubworker({
-    subworkerId,
+  console.log(chalk.green('registering worker...'));
+  const { id: workerId, name, description, avatar, skills } = schema.schema;
+  const res = await deworkerAPI.registerWworker({
+    workerId,
     nameForHuman: name.human,
     nameForModel: name.model,
     descriptionForHuman: description.human,
@@ -51,8 +49,8 @@ export default async function handleRegisterSubworker(options: any) {
   });
 
   if (res.status === 'success') {
-    console.log(chalk.green('the subworker has been successfuly registered!'));
+    console.log(chalk.green('the worker has been successfuly registered!'));
   } else {
-    console.log(chalk.red(`subworker register failed, ${res.msg}`));
+    console.log(chalk.red(`worker register failed, ${res.msg}`));
   }
 }

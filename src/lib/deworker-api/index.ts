@@ -6,8 +6,8 @@ import {
   IPeerRegisterParams,
   IPeer,
   IResponse,
-  ISubworkerRegisterParams,
-  ISubworker,
+  IWorkerRegisterParams,
+  IWorker,
 } from './interface';
 
 export class DeworkerAPI {
@@ -15,7 +15,7 @@ export class DeworkerAPI {
   private apiKey?: string;
 
   constructor(options?: DeworkerOptions) {
-    this.endpoint = options?.endpoint || 'http://localhost:6000';
+    this.endpoint = options?.endpoint || 'https://api-staging.deworker.ai';
     this.apiKey = options?.apiKey;
   }
 
@@ -47,17 +47,17 @@ export class DeworkerAPI {
   }
 
   async getBestRelay(): Promise<IResponse<string>> {
-    const res = await this.request('/api/v1/peer/relay/best-one', );
+    const res = await this.request('/api/v1/peer/relay/best-one');
     return res.json() as Promise<IResponse<string>>;
   }
 
-  async registerSubworker(data: ISubworkerRegisterParams): Promise<IResponse<ISubworker>> {
-    const res = await this.request('/api/v1/subworker/register', {
+  async registerWworker(data: IWorkerRegisterParams): Promise<IResponse<IWorker>> {
+    const res = await this.request('/api/v1/worker/register', {
       method: 'POST',
       body: JSON.stringify(data),
     });
 
-    return res.json() as Promise<IResponse<ISubworker>>;
+    return res.json() as Promise<IResponse<IWorker>>;
   }
 }
 

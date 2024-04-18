@@ -1,8 +1,8 @@
-type: subworker
+type: worker
 version: 1.0.0
 
 schema:
-  id: subworker-01
+  id: worker-01
   name:
     human: name for human
     model: name for human

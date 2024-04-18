@@ -1,13 +1,13 @@
 import { Command } from 'commander';
-import handleRegisterSubworker from './register.js';
+import handleRegisterWorker from './register.js';
 
-const cmd = new Command('subworker');
+const cmd = new Command('worker');
 
 cmd
   .command('register')
-  .description('register a subworker to deworker network')
+  .description('register a AI worker to deworker network')
   .option('--key <key>', 'deworker api key')
   .option('--endpoint <endpoint>', 'deworker api endpoint')
-  .action(handleRegisterSubworker);
+  .action(handleRegisterWorker);
 
 export default cmd;

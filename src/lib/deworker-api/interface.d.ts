@@ -18,23 +18,17 @@ export interface IPeerKey {
 
 export interface IPeerRegisterParams {
   peerId: string;
-  subworkerId: string;
+  workerId: string;
 }
 
-export interface ISubworkerRegisterParams
+export interface IWorkerRegisterParams
   extends Pick<
-    ISubworker,
-    | 'subworkerId'
-    | 'nameForHuman'
-    | 'nameForModel'
-    | 'descriptionForHuman'
-    | 'descriptionForModel'
-    | 'skills'
-    | 'avatar'
+    IWorker,
+    'workerId' | 'nameForHuman' | 'nameForModel' | 'descriptionForHuman' | 'descriptionForModel' | 'skills' | 'avatar'
   > {}
 
-export interface ISubworker {
-  subworkerId: string;
+export interface IWorker {
+  workerId: string;
   nameForHuman: string;
   nameForModel: string;
   descriptionForHuman: string;
@@ -67,7 +61,7 @@ export interface IPeer {
   peerId: string;
   address: string;
   user: string;
-  subworkerId: string;
+  workerId: string;
   user: string;
   locked: boolean;
   verified: boolean;

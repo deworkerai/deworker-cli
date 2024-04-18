@@ -15,7 +15,7 @@ import { decode, encode } from '@msgpack/msgpack';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
 
-export default async function handleStartSubworker(options: any) {
+export default async function handleStartWorker(options: any) {
   if (!options.key) {
     console.log(chalk.red('API key is required'));
     process.exit(1);
@@ -59,7 +59,7 @@ export default async function handleStartSubworker(options: any) {
     console.log(
       `${chalk.red('peerKey.json not found, please run the following command:')}
       1. ${chalk.cyan('deworker peer generate')}
-      2. ${chalk.cyan('deworker peer register --key=your_api_key --peerId=your_peer_id --subworkerId=your_subworker_id')}`,
+      2. ${chalk.cyan('deworker peer register --key=your_api_key --peerId=your_peer_id --workerId=your_worker_id')}`,
     );
     process.exit(1);
   }
@@ -105,8 +105,8 @@ export default async function handleStartSubworker(options: any) {
           // Output the data as a utf8 string
           const message = decode(msg.subarray()) as {
             skill: string;
-            subworkerName: string;
-            subworkerId?: string;
+            workerName: string;
+            workerId?: string;
             params: any;
           };
           console.log(chalk.green(`calling the skill ${chalk.cyan(message.skill)} ...`));
