@@ -3,15 +3,15 @@ import fs from 'fs';
 import path from 'path';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
+import { checkAPIKey } from '../../helpers/config.js';
+import config from '../../lib/config/index.js';
 
 export default async function handleRegisterWorker(options: any) {
-  if (!options.key) {
-    console.log(chalk.red('API key is required'));
-    process.exit(1);
-  }
+  checkAPIKey(options.key);
 
   const deworkerAPI = new DeworkerAPI({
-    apiKey: options.key,
+    apiKey: options.key || config.get('key'),
+    endpoint: options.endpoint || config.get('endpoint'),
   });
 
   console.log(chalk.green('generating a peer key...'));

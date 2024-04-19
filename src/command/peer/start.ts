@@ -14,12 +14,11 @@ import { pipe } from 'it-pipe';
 import { decode, encode } from '@msgpack/msgpack';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
+import { checkAPIKey } from '../../helpers/config.js';
+import config from '../../lib/config/index.js';
 
 export default async function handleStartWorker(options: any) {
-  if (!options.key) {
-    console.log(chalk.red('API key is required'));
-    process.exit(1);
-  }
+  checkAPIKey(options.key);
 
   const yamlPath = path.join(process.cwd(), 'deworker.yaml');
   if (!fs.existsSync(yamlPath)) {
@@ -28,6 +27,10 @@ export default async function handleStartWorker(options: any) {
   }
   const file = fs.readFileSync(yamlPath, 'utf8');
   const schema = YAML.parse(file);
+  if (schema.type !== 'worker') {
+    console.log(chalk.red('type must be worker, found ', schema.type));
+    process.exit(1);
+  }
 
   const entryPath = path.join(process.cwd(), schema.schema.entry);
 
@@ -41,8 +44,8 @@ export default async function handleStartWorker(options: any) {
 
   console.log(chalk.green('choosing a best one relay node address...'));
   const deworkerAPI = new DeworkerAPI({
-    apiKey: options.key,
-    endpoint: options.endpoint,
+    apiKey: options.key || config.get('key'),
+    endpoint: options.endpoint || config.get('endpoint'),
   });
 
   const addr = await deworkerAPI.getBestRelay();
@@ -73,11 +76,15 @@ export default async function handleStartWorker(options: any) {
     transports: [
       webSockets(),
       circuitRelayTransport({
-        discoverRelays: 2,
+        discoverRelays: 1,
       }),
     ],
     connectionEncryption: [noise()],
-    streamMuxers: [yamux()],
+    streamMuxers: [
+      yamux({
+        keepAliveInterval: 5000,
+      }),
+    ],
     services: {
       identify: identify(),
     },
@@ -113,7 +120,7 @@ export default async function handleStartWorker(options: any) {
 
           // run handler
           const skill = schema.schema.skills.find((sk: any) => sk.name.model === message.skill);
-          const res = await entry[skill.handler]({ params: message.params });
+          const res = await entry?.[skill?.handler]?.({ params: message.params });
 
           // Encode the reply message
           const replyMessage = encode(res);

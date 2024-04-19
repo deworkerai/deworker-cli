@@ -1,13 +1,12 @@
 import chalk from 'chalk';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
+import config from '../../lib/config/index.js';
+import { checkAPIKey } from '../../helpers/config.js';
 
 export default async function handleRegisterPeer(options: any) {
   const { key, peerId, workerId } = options;
-  if (!key) {
-    console.log(chalk.red('API key is required'));
-    process.exit(1);
-  }
+  checkAPIKey(key);
 
   if (!peerId) {
     console.log(
@@ -23,8 +22,8 @@ export default async function handleRegisterPeer(options: any) {
   }
 
   const deworkerAPI = new DeworkerAPI({
-    apiKey: options.key,
-    endpoint: options.endpoint,
+    apiKey: options.key || config.get('key'),
+    endpoint: options.endpoint || config.get('endpoint'),
   });
 
   console.log(chalk.green('registering peer...'));
