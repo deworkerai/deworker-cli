@@ -12,6 +12,9 @@ import { createLibp2p } from 'libp2p';
 import { createFromJSON } from '@libp2p/peer-id-factory';
 import { pipe } from 'it-pipe';
 import { decode, encode } from '@msgpack/msgpack';
+import map from 'it-map';
+import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string';
+import * as lp from 'it-length-prefixed';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
 import { checkAPIKey } from '../../helpers/config.js';
@@ -115,21 +118,33 @@ export default async function handleStartWorker(options: any) {
             workerName: string;
             workerId?: string;
             params: any;
+            stream?: boolean;
           };
           console.log(chalk.green(`calling the skill ${chalk.cyan(message.skill)} ...`));
 
           // run handler
           const skill = schema.schema.skills.find((sk: any) => sk.name.model === message.skill);
-          const res = await entry?.[skill?.handler]?.({ params: message.params });
+          const res = await entry?.[skill?.handler]?.(message);
+          if (message.stream) {
+            // Send the reply
+            await pipe(
+              res, // Source data
+              // Turn strings into buffers
+              (source) => map(source, (string: string) => uint8ArrayFromString(string)),
+              // Encode with length prefix (so receiving side knows how much data is coming)
+              (source) => lp.encode(source),
+              stream.sink, // Target stream
+            );
+          } else {
+            // Encode the reply message
+            const replyMessage = encode(res);
 
-          // Encode the reply message
-          const replyMessage = encode(res);
-
-          // Send the reply
-          await pipe(
-            [replyMessage], // Source data
-            stream, // Target stream
-          );
+            // Send the reply
+            await pipe(
+              [replyMessage], // Source data
+              stream, // Target stream
+            );
+          }
         }
       });
     },
