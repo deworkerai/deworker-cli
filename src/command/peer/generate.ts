@@ -19,11 +19,11 @@ export default async function handleRegisterWorker(options: any) {
 
   if (res.status === 'success') {
     console.log(chalk.green('peer key generated successfuly!'));
-    console.log(options);
 
     if (options.file) {
       const peerKeyPath = path.join(process.cwd(), 'peerKey.json');
       fs.writeFileSync(peerKeyPath, JSON.stringify(res.data, null, 2));
+      console.log(chalk.green(`saved peer key into ${chalk.cyan(peerKeyPath)} successfuly!`));
     } else {
       console.log(JSON.stringify(res.data, null, 2));
     }

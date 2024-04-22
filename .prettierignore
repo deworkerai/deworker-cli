@@ -3,3 +3,5 @@ dist
 scripts
 package.json
 tsconfig.json
+README.md
+peerKey.json

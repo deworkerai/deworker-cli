@@ -32,9 +32,6 @@ importers:
       '@multiformats/multiaddr':
         specifier: ^12.2.1
         version: 12.2.1
-      '@questflow/deworker-cli':
-        specifier: ^1.0.0
-        version: 1.0.0(@types/node@20.11.30)(typescript@5.4.3)
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -410,10 +407,6 @@ packages:
   '@pkgr/core@0.1.1':
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
-
-  '@questflow/deworker-cli@1.0.0':
-    resolution: {integrity: sha512-gOifJwyAJ8cK1aiWRbXn50ZifIZ1CnEPYXq1uWhsI8RRL7Af5oeXes7FU05eAojiGVM/+piapbYjwJDny6SuCg==}
-    hasBin: true
 
   '@tsconfig/node10@1.0.11':
     resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
@@ -2005,37 +1998,6 @@ snapshots:
       fastq: 1.17.1
 
   '@pkgr/core@0.1.1': {}
-
-  '@questflow/deworker-cli@1.0.0(@types/node@20.11.30)(typescript@5.4.3)':
-    dependencies:
-      '@chainsafe/libp2p-noise': 15.0.0
-      '@chainsafe/libp2p-yamux': 6.0.2
-      '@libp2p/circuit-relay-v2': 1.0.18
-      '@libp2p/identify': 1.0.17
-      '@libp2p/peer-id-factory': 4.0.9
-      '@libp2p/websockets': 8.0.18
-      '@msgpack/msgpack': 3.0.0-beta2
-      '@multiformats/multiaddr': 12.2.1
-      chalk: 5.3.0
-      commander: 12.0.0
-      configstore: 6.0.0
-      it-length-prefixed: 9.0.4
-      it-map: 3.0.5
-      it-pipe: 3.0.1
-      libp2p: 1.3.3
-      node-fetch: 3.3.2
-      ts-node: 10.9.2(@types/node@20.11.30)(typescript@5.4.3)
-      tsx: 4.7.1
-      uint8arrays: 5.0.3
-      yaml: 2.4.1
-    transitivePeerDependencies:
-      - '@swc/core'
-      - '@swc/wasm'
-      - '@types/node'
-      - bufferutil
-      - supports-color
-      - typescript
-      - utf-8-validate
 
   '@tsconfig/node10@1.0.11': {}
 
