@@ -84,7 +84,7 @@ peer key generated successfuly!
 saved peer key into /home/carney/work/questflow/github/hello-worker/peerKey.json successfuly!
 ```
 
-If it works, the peerKey.json content like this:
+And the peerKey.json content like this:
   
 ```json
 {
@@ -96,7 +96,7 @@ If it works, the peerKey.json content like this:
 
 Copy the id, we will use it later.
 
-And then, you can register your peer bind to this worker by running:
+Now you can register your peer bind to this worker by running:
 
 ```bash
 deworker peer register --workerId=worker_id --peerId=your_peer_id
