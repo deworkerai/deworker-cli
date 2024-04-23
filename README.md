@@ -4,6 +4,8 @@ Welcome to use deworker cli. This is a cli for deworker protocol powered by ques
 
 ## Installation
 
+*Windows maybe not work, you can use WSL, linux or mac.*
+
 **Prerequisites**
 
 Before you install deworker cli, you need to have node.js(>= v18.x) installed on your machine. You can download it from [node.js](https://nodejs.org/).
@@ -55,7 +57,7 @@ Before you start a worker, you need to download a worker from the [deworker repo
 We can clone the hello worker from the deworker repositories by running:
 
 ```bash
-git clone git@github.com:deworkerai/deworker-worker.git hello-worker
+git clone https://github.com/deworkerai/deworker-worker.git hello-worker
 ```
 
 **Install the dependencies by running:**
