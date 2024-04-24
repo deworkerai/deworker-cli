@@ -35,3 +35,5 @@ schema:
   hooks:
     post: functionName
     pre: functionName
+env:
+  ENV1: value
