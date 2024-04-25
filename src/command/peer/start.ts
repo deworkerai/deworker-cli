@@ -124,6 +124,10 @@ export default async function handleStartWorker(options: any) {
 
           // run handler
           const skill = schema.schema.skills.find((sk: any) => sk.name.model === message.skill);
+          if (!skill) {
+            stream.abort(new Error('Skill not found'));
+            return;
+          }
           const res = await entry?.[skill?.handler]?.(message);
           if (message.stream) {
             // Send the reply
