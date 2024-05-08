@@ -1,6 +1,6 @@
 {
   "name": "@deworker/deworker-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Deworker CLI",
   "main": "src/index.ts",
   "bin": {
@@ -49,6 +49,7 @@
     "@libp2p/circuit-relay-v2": "^1.0.18",
     "@libp2p/identify": "^1.0.17",
     "@libp2p/peer-id-factory": "^4.0.9",
+    "@libp2p/ping": "^1.0.17",
     "@libp2p/websockets": "^8.0.18",
     "@msgpack/msgpack": "3.0.0-beta2",
     "@multiformats/multiaddr": "^12.2.1",

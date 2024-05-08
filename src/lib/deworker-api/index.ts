@@ -46,7 +46,13 @@ export class DeworkerAPI {
     return res.json() as Promise<IResponse<IPeer>>;
   }
 
-  async getBestRelay(): Promise<IResponse<string>> {
+  async getBestRelay(relay?: string): Promise<IResponse<string>> {
+    if (relay) {
+      return {
+        status: 'success',
+        data: relay,
+      };
+    }
     const res = await this.request('/api/v1/peer/relay/best-one');
     return res.json() as Promise<IResponse<string>>;
   }

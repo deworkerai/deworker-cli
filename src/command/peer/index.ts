@@ -26,6 +26,7 @@ cmd
   .description('start run a worker as a miner')
   .option('--key <key>', 'deworker api key')
   .option('--endpoint <endpoint>', 'deworker api endpoint')
+  .option('--relay <relay>', 'relay node addr')
   .action(handleStartPeer);
 
 export default cmd;

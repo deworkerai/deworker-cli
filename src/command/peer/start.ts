@@ -15,6 +15,7 @@ import { decode, encode } from '@msgpack/msgpack';
 import map from 'it-map';
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string';
 import * as lp from 'it-length-prefixed';
+import { ping } from '@libp2p/ping';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
 import { checkAPIKey } from '../../helpers/config.js';
@@ -51,7 +52,7 @@ export default async function handleStartWorker(options: any) {
     endpoint: options.endpoint || config.get('endpoint'),
   });
 
-  const addr = await deworkerAPI.getBestRelay();
+  const addr = await deworkerAPI.getBestRelay(options.relay);
   if (addr.status === 'fail') {
     console.log(chalk.red(`get relay node address failed, ${addr.msg}`));
     process.exit(1);
@@ -90,6 +91,13 @@ export default async function handleStartWorker(options: any) {
     ],
     services: {
       identify: identify(),
+      // @ts-expect-error - missing types
+      ping: ping({
+        protocolPrefix: 'deworker',
+        maxInboundStreams: Infinity,
+        maxOutboundStreams: Infinity,
+        runOnTransientConnection: true,
+      }),
     },
   });
   await node.start();
