@@ -59,9 +59,8 @@ async function dialSend(args: ISendRequest): Promise<string | void> {
   try {
     const { node, autoRelayNodeAddr, message, stream } = args;
 
-    const co = await node.dial(multiaddr(autoRelayNodeAddr));
-    console.log(`[P2P] dialed ${autoRelayNodeAddr}`);
-    const newStream = await co.newStream('/call/1.0.0', {
+    const conn = await node.dial(multiaddr(autoRelayNodeAddr));
+    const newStream = await conn.newStream('/call/1.0.0', {
       runOnTransientConnection: true,
     });
     const encodedMessage = encode(message);
@@ -185,7 +184,7 @@ export default async function handleTestWorker(options: any) {
         },
         stream: true,
         onStream(chunk) {
-          res.write(`data: ${chunk}\n\n`);
+          res.write(chunk);
         },
         onStreamEnd() {
           res.end();
@@ -260,6 +259,7 @@ export default async function handleTestWorker(options: any) {
           // run handler
           const skill = schema.schema.skills.find((sk: any) => sk.name.model === message.skill);
           if (!skill) {
+            console.log(chalk.red('Skill not found'));
             stream.abort(new Error('Skill not found'));
             return;
           }

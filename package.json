@@ -1,6 +1,6 @@
 {
-  "name": "@questflow/deworker-cli",
-  "version": "1.0.3",
+  "name": "@deworker/deworker-cli",
+  "version": "1.0.0",
   "description": "Deworker CLI",
   "main": "src/index.ts",
   "bin": {
@@ -24,7 +24,7 @@
     ]
   },
   "keywords": [],
-  "author": "Questflow Labs",
+  "author": "Deworker",
   "license": "ISC",
   "devDependencies": {
     "@types/configstore": "^6.0.2",

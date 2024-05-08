@@ -42,7 +42,7 @@ To setup deworker cli, you need to run the following command:
 
 **Setup API key**
 
-Now, you can not get API key. Please contact us contac@questflow.ai to get one.
+Now, you can not get API key. Please contact us contac@deworker.ai to get one.
 
 ```bash
 deworker config set key your_api_key
