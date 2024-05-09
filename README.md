@@ -136,10 +136,10 @@ If it works, you will see the following output:
 ```bash
 checking whether the entry file exist...
 choosing a best one relay node address...
-the best one relay node address is /dns4/relay-staging.deworker.ai/tcp/8443/ws/p2p/12D3KooWA7xupjkFvhh7FgvASrTPXGzRsrN4yUWoKYw7nmZaQRJM
-peer started with id 12D3KooWJrHnbc6wq5fKXJZxebXgdN7xZ6qaUK2io5ZikEqt33gx
-connected to the relay /dns4/relay-staging.deworker.ai/tcp/8443/ws/p2p/12D3KooWA7xupjkFvhh7FgvASrTPXGzRsrN4yUWoKYw7nmZaQRJM
-advertising with a relay address of /ip4/127.0.0.1/tcp/8443/ws/p2p/12D3KooWA7xupjkFvhh7FgvASrTPXGzRsrN4yUWoKYw7nmZaQRJM/p2p-circuit/p2p/12D3KooWJrHnbc6wq5fKXJZxebXgdN7xZ6qaUK2io5ZikEqt33gx
+executing post hooks...
+peer started with id 12D3KooWCoQzkraAg74ghdGhtqqU65zJeWpKonSC3WRRwEquEpMJ
+12D3KooWA7xupjkFvhh7FgvASrTPXGzRsrN4yUWoKYw7nmZaQRJM connected
+start peer successfully
 ```
 
 Congratulations! You have started a worker successfully!

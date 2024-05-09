@@ -27,6 +27,11 @@ export interface IWorkerRegisterParams
     'workerId' | 'nameForHuman' | 'nameForModel' | 'descriptionForHuman' | 'descriptionForModel' | 'skills' | 'avatar'
   > {}
 
+export interface IWorkerUpdateParams
+  extends Pick<
+    IWorker,
+    'workerId' | 'nameForHuman' | 'nameForModel' | 'descriptionForHuman' | 'descriptionForModel' | 'skills' | 'avatar'
+  > {}
 export interface IWorker {
   workerId: string;
   nameForHuman: string;

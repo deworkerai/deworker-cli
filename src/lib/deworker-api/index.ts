@@ -8,6 +8,7 @@ import {
   IResponse,
   IWorkerRegisterParams,
   IWorker,
+  IWorkerUpdateParams,
 } from './interface';
 
 export class DeworkerAPI {
@@ -59,6 +60,15 @@ export class DeworkerAPI {
 
   async registerWworker(data: IWorkerRegisterParams): Promise<IResponse<IWorker>> {
     const res = await this.request('/api/v1/worker/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    return res.json() as Promise<IResponse<IWorker>>;
+  }
+
+  async updateWorker(data: IWorkerUpdateParams): Promise<IResponse<IWorker>> {
+    const res = await this.request('/api/v1/worker/update', {
       method: 'POST',
       body: JSON.stringify(data),
     });

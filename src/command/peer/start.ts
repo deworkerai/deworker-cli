@@ -58,8 +58,6 @@ export default async function handleStartWorker(options: any) {
     process.exit(1);
   }
 
-  console.log(chalk.green(`the best one relay node address is ${chalk.cyan(addr.data)}`));
-
   const keyPath = path.join(process.cwd(), 'peerKey.json');
 
   if (!fs.existsSync(keyPath)) {
@@ -100,19 +98,53 @@ export default async function handleStartWorker(options: any) {
       }),
     },
   });
+
+  // Log a message when a remote peer connects to us
+  node.addEventListener('peer:connect', (evt) => {
+    const remotePeer = evt.detail;
+    console.log(chalk.cyan(remotePeer.toString()) + chalk.green(' connected'));
+  });
+
+  // Wait for connection and relay to be bind for the example purpose
+  node.addEventListener('self:peer:update', () => {
+    // Updated self multiaddrs?
+    // console.log(chalk.green(`advertising with a relay address of ${chalk.cyan(node.getMultiaddrs()[0]?.toString())}`));
+  });
+
+  node.addEventListener('connection:close', () => {
+    console.log(chalk.red(`connection closed`));
+    dialToRelay();
+  });
+
   await node.start();
-  console.log(chalk.green(`peer started with id ${chalk.cyan(node.peerId.toString())}`));
-
-  await node.dial(multiaddr(addr.data));
-
-  console.log(chalk.green(`connected to the relay ${chalk.cyan(addr.data)}`));
 
   const entry = await import(path.join(process.cwd(), schema.schema.entry));
-
   if (schema.schema.hooks?.post) {
     console.log(chalk.green(`executing post hooks...`));
     await entry[schema.schema.hooks.post]();
   }
+
+  console.log(chalk.green(`peer started with id ${chalk.cyan(node.peerId.toString())}`));
+
+  const dialToRelay = async () => {
+    try {
+      await node.dial(multiaddr(addr.data));
+      console.log(chalk.green(`start peer successfully`));
+    } catch (err: any) {
+      if (err.message === 'Error: unexpected end of input') {
+        console.log(chalk.red(`connect failed, maybe your peer id has not been approved yet, or some other reasons.`));
+        process.exit(1);
+      }
+      console.log(chalk.red(`failed to connect to the relay ${chalk.cyan(addr.data)}`));
+      console.error(err);
+      console.log(chalk.yellow(`try to reconnect after 5s...`));
+      setTimeout(() => {
+        dialToRelay();
+      }, 5000);
+    }
+  };
+
+  await dialToRelay();
 
   await node.handle(
     '/call/1.0.0',
@@ -166,20 +198,4 @@ export default async function handleStartWorker(options: any) {
       maxOutboundStreams: 10000000,
     },
   );
-  // Log a message when a remote peer connects to us
-  node.addEventListener('peer:connect', (evt) => {
-    const remotePeer = evt.detail;
-    console.log(chalk.cyan(remotePeer.toString()) + chalk.green(' connected'));
-  });
-
-  // Wait for connection and relay to be bind for the example purpose
-  node.addEventListener('self:peer:update', () => {
-    // Updated self multiaddrs?
-    console.log(chalk.green(`advertising with a relay address of ${chalk.cyan(node.getMultiaddrs()[0]?.toString())}`));
-  });
-
-  // node.addEventListener('connection:close', (evt) => {
-  //   console.log(evt);
-  //   // console.log(chalk.cyan(remotePeer.toString()) + chalk.green(' connected'));
-  // });
 }
