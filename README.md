@@ -27,13 +27,13 @@ After you have installed all the prerequisites, you can install deworker cli by 
 
 ```bash
 # pnpm
-pnpm install -g @questflow/deworker-cli
+pnpm install -g @deworker/deworker-cli
 
 # npm
-npm install -g @questflow/deworker-cli
+npm install -g @deworker/deworker-cli
 
 # yarn
-yarn global add @questflow/deworker-cli
+yarn global add @deworker/deworker-cli
 ```
 
 ## Setup

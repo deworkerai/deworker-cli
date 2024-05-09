@@ -32,6 +32,7 @@ export interface IWorkerUpdateParams
     IWorker,
     'workerId' | 'nameForHuman' | 'nameForModel' | 'descriptionForHuman' | 'descriptionForModel' | 'skills' | 'avatar'
   > {}
+
 export interface IWorker {
   workerId: string;
   nameForHuman: string;
