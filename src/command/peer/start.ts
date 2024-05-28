@@ -126,9 +126,10 @@ export default async function handleStartWorker(options: any) {
 
   console.log(chalk.green(`peer started with id ${chalk.cyan(node.peerId.toString())}`));
 
+  let conn: any;
   const dialToRelay = async () => {
     try {
-      await node.dial(multiaddr(addr.data));
+      conn = await node.dial(multiaddr(addr.data));
       console.log(chalk.green(`start peer successfully`));
     } catch (err: any) {
       if (err.message === 'Error: unexpected end of input') {
@@ -198,4 +199,15 @@ export default async function handleStartWorker(options: any) {
       maxOutboundStreams: 10000000,
     },
   );
+
+  const healthCheck = async () => {
+    console.log('heartbeat');
+    if (conn.status === 'closed') {
+      console.log(chalk.red(`connection closed`));
+      await dialToRelay();
+    }
+    setTimeout(healthCheck, 5000);
+  };
+
+  healthCheck();
 }

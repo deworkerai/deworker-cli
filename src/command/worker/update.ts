@@ -44,6 +44,7 @@ export default async function handleUpdateWorker(options: any) {
         descriptionForModel: skill.description.model,
         requestSchema: skill.requestSchema,
         responseSchema: skill.responseSchema,
+        basePoints: skill.basePoints,
       };
     }),
   });
