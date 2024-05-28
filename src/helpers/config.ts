@@ -17,3 +17,9 @@ export const checkAPIKey = (key: string) => {
   //   process.exit(1);
   // }
 };
+
+export const simplifyPeerId = (peerId: string) => {
+  const prefix = peerId.slice(0, 5);
+  const suffix = peerId.slice(-5);
+  return `${prefix}...${suffix}`;
+};

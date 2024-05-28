@@ -18,7 +18,7 @@ import * as lp from 'it-length-prefixed';
 import { ping } from '@libp2p/ping';
 
 import { DeworkerAPI } from '../../lib/deworker-api/index.js';
-import { checkAPIKey } from '../../helpers/config.js';
+import { checkAPIKey, simplifyPeerId } from '../../helpers/config.js';
 import config from '../../lib/config/index.js';
 
 export default async function handleStartWorker(options: any) {
@@ -124,7 +124,10 @@ export default async function handleStartWorker(options: any) {
     await entry[schema.schema.hooks.post]();
   }
 
-  console.log(chalk.green(`peer started with id ${chalk.cyan(node.peerId.toString())}`));
+  const shortPeerId = simplifyPeerId(node.peerId.toString());
+  console.log(
+    chalk.green(`peer started with id ${chalk.cyan(node.peerId.toString())}, short id is ${chalk.cyan(shortPeerId)}`),
+  );
 
   let conn: any;
   const dialToRelay = async () => {
@@ -161,8 +164,11 @@ export default async function handleStartWorker(options: any) {
             params: any;
             stream?: boolean;
           };
-          console.log(chalk.green(`calling the skill ${chalk.cyan(message.skill)} ...`));
-
+          // console.log(chalk.green(`calling the skill ${chalk.cyan(message.skill)} ...`));
+          const date = new Date();
+          console.log(
+            `${chalk.cyan(`[${shortPeerId}]: `)}${date.toISOString()} ${chalk.green(`worker started the skill ${chalk.cyan(message.skill)}`)}`,
+          );
           // run handler
           const skill = schema.schema.skills.find((sk: any) => sk.name.model === message.skill);
           if (!skill) {
@@ -180,6 +186,10 @@ export default async function handleStartWorker(options: any) {
               (source) => lp.encode(source),
               stream.sink, // Target stream
             );
+            const date = new Date();
+            console.log(
+              `${chalk.cyan(`[${shortPeerId}]: `)}${date.toISOString()} ${chalk.green(`worker completed the skill ${chalk.cyan(message.skill)}`)}`,
+            );
           } else {
             // Encode the reply message
             const replyMessage = encode(res);
@@ -188,6 +198,10 @@ export default async function handleStartWorker(options: any) {
             await pipe(
               [replyMessage], // Source data
               stream, // Target stream
+            );
+            const date = new Date();
+            console.log(
+              `${chalk.cyan(`[${shortPeerId}]: `)}${date.toISOString()} ${chalk.green(`worker completed the skill ${chalk.cyan(message.skill)}`)}`,
             );
           }
         }
@@ -201,7 +215,8 @@ export default async function handleStartWorker(options: any) {
   );
 
   const healthCheck = async () => {
-    console.log('heartbeat');
+    const date = new Date();
+    console.log(`${chalk.cyan(`[${simplifyPeerId(node.peerId.toString())}]: `)}${date.toISOString()} heartbeat`);
     if (conn.status === 'closed') {
       console.log(chalk.red(`connection closed`));
       await dialToRelay();
