@@ -7,7 +7,7 @@ import workerCMD from './command/worker/index.js';
 import peerCMD from './command/peer/index.js';
 import configCMD from './command/config/index.js';
 
-import pkg from 'package.json';
+import pkg from '../package.json';
 
 dotenv.config();
 
